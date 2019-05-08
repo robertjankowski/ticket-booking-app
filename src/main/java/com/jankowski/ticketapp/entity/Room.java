@@ -10,7 +10,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @ManyToMany
     private List<Movie> movies;
 
     private Long seats;
@@ -18,6 +18,9 @@ public class Room {
     public Room(List<Movie> movies, Long seats) {
         this.movies = movies;
         this.seats = seats;
+    }
+
+    public Room() {
     }
 
     public List<Movie> getMovies() {

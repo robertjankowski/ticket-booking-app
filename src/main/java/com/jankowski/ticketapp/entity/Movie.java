@@ -1,7 +1,6 @@
 package com.jankowski.ticketapp.entity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,12 +14,15 @@ public class Movie {
     @Column(unique = true)
     private String title;
 
-    @ElementCollection(targetClass = LocalDate.class)
+    @ElementCollection(targetClass = LocalDateTime.class)
     private List<LocalDateTime> screeningTimes;
 
     public Movie(String title, List<LocalDateTime> screeningTimes) {
         this.title = title;
         this.screeningTimes = screeningTimes;
+    }
+
+    public Movie() {
     }
 
     public String getTitle() {
