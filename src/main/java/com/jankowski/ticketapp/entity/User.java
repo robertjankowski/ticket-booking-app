@@ -20,7 +20,7 @@ public class User {
     private String surname;
 
 
-    public User(@Min(3) String name, @Min(3) String surname) {
+    public User(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
