@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class MovieControllerTest {
 
     @Autowired
@@ -44,7 +46,7 @@ public class MovieControllerTest {
 
     @Test
     public void checkNumberOfMovies() {
-        assertThat(movies.size()).isEqualTo(3);
+        assertThat(movies.size()).isEqualTo(4);
     }
 
 }
