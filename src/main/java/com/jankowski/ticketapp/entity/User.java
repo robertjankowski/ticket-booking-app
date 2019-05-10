@@ -29,7 +29,12 @@ public class User {
     public User() {
     }
 
-    public User(String name, String surname, double payments) {
+    public User(@Size(min = 3) String name, @Size(min = 3) String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public User(@Size(min = 3) String name, @Size(min = 3) String surname, double payments) {
         this.name = name;
         this.surname = surname;
         this.payments = payments;

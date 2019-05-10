@@ -8,6 +8,10 @@ public enum Ticket {
 
     private double price;
 
+    public double getPrice() {
+        return price;
+    }
+
     Ticket(double price) {
         this.price = price;
     }

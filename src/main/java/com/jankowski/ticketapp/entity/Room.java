@@ -39,6 +39,10 @@ public class Room {
         this.seats = seats;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
@@ -47,4 +51,5 @@ public class Room {
                 ", seats=" + seats +
                 '}';
     }
+
 }
