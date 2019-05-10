@@ -1,7 +1,6 @@
 package com.jankowski.ticketapp.controller;
 
 import com.jankowski.ticketapp.entity.User;
-import com.jankowski.ticketapp.exception.UserNotFoundException;
 import com.jankowski.ticketapp.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,14 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static org.springframework.util.StringUtils.capitalize;
 
 @Controller
 @RequestMapping("user")
 public class UserController {
-
-    private final Logger LOGGER = Logger.getLogger(UserController.class.getName());
 
     private final UserRepository userRepository;
 
@@ -25,31 +25,39 @@ public class UserController {
     }
 
     @GetMapping
-    @ResponseBody
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> findUsers() {
+        var users = StreamSupport
+                .stream(userRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
 
     @PostMapping
-    public ResponseEntity createUser(@Valid @RequestBody User user) { // TODO: validation!!!
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+        User savedUser = userRepository.save(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
-    @GetMapping("/{name}/{surname}")
-    @ResponseBody
-    public User findUser(@PathVariable String name, @PathVariable String surname) {
-        User user = null;
-        try {
-            user = StreamSupport
-                    .stream(this.userRepository.findAll().spliterator(), true)
-                    .filter(e -> e.same(name, surname))
-                    .findFirst().orElseThrow(UserNotFoundException::new);
-        } catch (UserNotFoundException e) {
-            LOGGER.severe("User not found");
+    @GetMapping("{name}/{surname}")
+    public ResponseEntity<User> findUser(@PathVariable String name, @PathVariable String surname) {
+        var user = userRepository.findByNameAndSurname(capitalize(name), capitalize(surname));
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return user;
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{name}/{surname}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable String name, @PathVariable String surname) {
+        var user = findUser(name, surname);
+        if (user.getStatusCode().is4xxClientError()) {
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        }
+        userRepository.delete(user.getBody());
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
 }
