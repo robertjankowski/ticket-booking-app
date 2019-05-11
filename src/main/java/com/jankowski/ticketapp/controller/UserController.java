@@ -1,6 +1,7 @@
 package com.jankowski.ticketapp.controller;
 
 import com.jankowski.ticketapp.entity.User;
+import com.jankowski.ticketapp.message.Message;
 import com.jankowski.ticketapp.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.jankowski.ticketapp.message.Message.USER_NOT_FOUND;
+import static com.jankowski.ticketapp.message.Message.USER_REMOVED;
 import static org.springframework.util.StringUtils.capitalize;
 
 @Controller
@@ -51,13 +54,13 @@ public class UserController {
     }
 
     @DeleteMapping("{name}/{surname}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable String name, @PathVariable String surname) {
+    public ResponseEntity<Message> deleteUser(@PathVariable String name, @PathVariable String surname) {
         var user = findUser(name, surname);
         if (user.getStatusCode().is4xxClientError()) {
-            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message(USER_NOT_FOUND), HttpStatus.BAD_REQUEST);
         }
         userRepository.delete(user.getBody());
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseEntity<>(new Message(USER_REMOVED), HttpStatus.OK);
     }
 
 }

@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.jankowski.ticketapp.message.Message.*;
@@ -71,12 +73,13 @@ public class RoomController {
         if (user.isEmpty()) {
             return new ResponseEntity<>(new Message(USER_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
-        var ticketStream = ticketTypes.stream()
+
+        Supplier<Stream<Optional<Ticket>>> ticketStream = () -> ticketTypes.stream()
                 .map(TicketConvert::convertToTicketType);
-        if (ticketStream.anyMatch(Optional::isEmpty)) {
+        if (ticketStream.get().anyMatch(Optional::isEmpty)) {
             return new ResponseEntity<>(new Message(TICKET_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
-        double totalCost = ticketStream
+        double totalCost = ticketStream.get()
                 .map(Optional::get)
                 .map(Ticket::getPrice)
                 .collect(Collectors.summingDouble(Double::doubleValue));
@@ -86,7 +89,7 @@ public class RoomController {
         userRepository.save(updatedUser);
 
         var updatedRoom = room.get();
-        updatedRoom.setSeats(updatedRoom.getSeats() - ticketTypes.size());
+        updatedRoom.setRow(updatedRoom.getRow() - ticketTypes.size());
         roomRepository.save(updatedRoom);
 
         var message = showReservation(updatedUser, updatedRoom, title, totalCost);

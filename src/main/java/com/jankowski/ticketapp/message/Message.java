@@ -7,6 +7,7 @@ public class Message {
     public static final String DATE_NOT_FOUND = "Not found screening time for specify movie";
     public static final String USER_NOT_FOUND = "User not found";
     public static final String TICKET_NOT_FOUND = "Ticket not found";
+    public static final String USER_REMOVED = "User removed";
 
     private String message;
 

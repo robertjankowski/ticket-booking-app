@@ -13,10 +13,14 @@ public class Room {
     @ManyToMany
     private List<Movie> movies;
 
+    @Column(name = "row_number")
+    private Long row;
+
     private Long seats;
 
-    public Room(List<Movie> movies, Long seats) {
+    public Room(List<Movie> movies, Long row, Long seats) {
         this.movies = movies;
+        this.row = row;
         this.seats = seats;
     }
 
@@ -31,6 +35,18 @@ public class Room {
         this.movies = movies;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Long getRow() {
+        return row;
+    }
+
+    public void setRow(Long row) {
+        this.row = row;
+    }
+
     public Long getSeats() {
         return seats;
     }
@@ -39,17 +55,13 @@ public class Room {
         this.seats = seats;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     @Override
     public String toString() {
         return "Room{" +
                 "id=" + id +
                 ", movies=" + movies +
+                ", row=" + row +
                 ", seats=" + seats +
                 '}';
     }
-
 }

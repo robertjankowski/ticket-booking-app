@@ -1,5 +1,6 @@
 package com.jankowski.ticketapp.entity;
 
+import com.jankowski.ticketapp.entity.validation.Surname;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.Entity;
@@ -7,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 public class User {
@@ -21,7 +21,7 @@ public class User {
     private String name;
 
     @NonNull
-    @Size(min = 3)
+    @Surname
     private String surname;
 
     private double payments;
@@ -29,12 +29,12 @@ public class User {
     public User() {
     }
 
-    public User(@Size(min = 3) String name, @Size(min = 3) String surname) {
+    public User(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
 
-    public User(@Size(min = 3) String name, @Size(min = 3) String surname, double payments) {
+    public User(String name, String surname, double payments) {
         this.name = name;
         this.surname = surname;
         this.payments = payments;
@@ -64,10 +64,6 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", payments=" + payments +
                 '}';
-    }
-
-    public boolean same(String name, String surname) {
-        return Objects.equals(this.getName(), name) && Objects.equals(this.getSurname(), surname);
     }
 
     public double getPayments() {

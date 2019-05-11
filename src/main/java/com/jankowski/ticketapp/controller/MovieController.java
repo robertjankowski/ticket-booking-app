@@ -31,7 +31,7 @@ public class MovieController {
         this.movieRepository = movieRepository;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json; charset=utf-8")
     public ResponseEntity<Iterable<Movie>> findAllMovies() {
         final List<Movie> movies = StreamSupport
                 .stream(movieRepository.findAll().spliterator(), false)

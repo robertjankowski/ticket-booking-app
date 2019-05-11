@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.jankowski.ticketapp.message.Message.USER_NOT_FOUND;
+import static com.jankowski.ticketapp.message.Message.USER_REMOVED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -48,13 +50,13 @@ public class UserControllerTest {
     public void zDeleteValidUser() {
         var request = userController.deleteUser("Jan", "Nowak");
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(request.getBody()).isTrue();
+        assertThat(request.getBody().getMessage()).isEqualTo(USER_REMOVED);
     }
 
     @Test
     public void zDeleteNonValidUser() {
         var request = userController.deleteUser("Paul", "Thomas");
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(request.getBody()).isFalse();
+        assertThat(request.getBody().getMessage()).isEqualTo(USER_NOT_FOUND);
     }
 }
