@@ -2,6 +2,13 @@
 # ticket-booking-app
 Ticket booking app for Touk recruitment process
 
+## Technologies
+- Java 11
+- Spring Boot
+- H2 (as in-memory database)
+- jUnit
+- [jq](https://github.com/stedolan/jq)  (pretty print JSON files)
+- Travis CI
 
 ## Running and testing app
 To run application execute
@@ -17,8 +24,11 @@ Moreover, the Travis is configured so every push to repository means that tests 
 ## Business scenario (use case)
 To run sample use case execute `use_case.sh`
 
+Example:
+![example](http://g.recordit.co/cmUAxfr7Oc.gif)
+
 ## Endpoints
-[`jq`](https://github.com/stedolan/jq) was used to process JSON. Usage example for Windows users
+`jq` was used to process JSON. Usage example for Windows users
 ```text
 curl <url> | /path/to/jq.exe
 ```
@@ -290,3 +300,9 @@ curl localhost:8080/user/Jan/Nowak | jq-win64.exe
   "message": "User removed"
 }
 ```
+
+
+#### TODO
+- more unit tests
+- add integration tests
+- change entity model (now all rooms has the same screening times) - for example remove `List<LocalDateTime>` from Movie entity and in Room entity add maybe `Map<Room, List<LocalDateTime>>` field.
