@@ -26,8 +26,9 @@ curl <url> | /path/to/jq.exe
 #### List of available endpoints
 
 **RoomController**
-1. /room - get all room (GET)
-2. /room/reserve/{id}/{title}/{date}/{userId} - reserve room {id} for movie with {title} at {date} for user with {userId}
+1. /room - get all rooms (GET)
+2. /room/movie/{title}/{date} - get all rooms where movie with {title} is played at {date}
+3. /room/reserve/{id}/{title}/{date}/{userId} - reserve room {id} for movie with {title} at {date} for user with {userId}
 
 Example 1.
 ```bash
@@ -111,7 +112,43 @@ curl localhost:8080/room | jq-win64.exe
   }
 ]
 ```
-Example 2. (reserve room 1, movie Inception, user with id = 2 bought 2 tickets: for adult and child)
+Example 2.
+```bash
+curl localhost:8080/room/movie/Inception/2019-05-08T12:30:00
+```
+```json
+[
+    {
+        "id": 1,
+        "movies": [
+            {
+                "title": "Inception",
+                "screeningTimes": [
+                    "2019-05-08T12:30:00"
+                ]
+            }
+        ],
+        "row": 5,
+        "seats": 10
+    },
+    {
+        "id": 2,
+        "movies": [
+            {
+                "title": "Inception",
+                "screeningTimes": [
+                    "2019-05-08T12:30:00"
+                ]
+            }
+        ],
+        "row": 4,
+        "seats": 20
+    }
+]
+```
+
+
+Example 3. (reserve room 1, movie Inception, user with id = 2 bought 2 tickets: for adult and child)
 ```bash
 curl -X POST -H "Content-Type: application/json" \ 
     -d "[ \"ADULT\", \"CHILD\" ]" localhost:8080/room/reserve/1/Inception/2019-05-08T12:30:00/2 | jq-win64.exe

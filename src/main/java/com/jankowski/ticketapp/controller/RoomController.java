@@ -49,6 +49,15 @@ public class RoomController {
         return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
+    @GetMapping("movie/{title}/{date}")
+    public ResponseEntity<List<Room>> getRoomsTitleDate(@PathVariable String title,
+                                                        @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+        var rooms = roomRepository.findAllByMovieTitleDate(title, date);
+        if (rooms.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
     @PostMapping("reserve/{id}/{title}/{date}/{userId}")
     public ResponseEntity<Message> reserveRoom(@PathVariable Long id,
                                                @PathVariable String title,

@@ -56,6 +56,10 @@ public class User {
         this.surname = surname;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "User{" +

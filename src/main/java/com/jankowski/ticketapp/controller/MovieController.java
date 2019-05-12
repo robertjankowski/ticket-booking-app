@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static com.jankowski.ticketapp.utils.DateTimeUtils.MIN_MINUTES_TO_BUY;
-import static com.jankowski.ticketapp.utils.MovieSortingUtil.sortByTitleAndScreeningTime;
+import static com.jankowski.ticketapp.utils.MovieUtils.sortByTitleAndScreeningTime;
 
 @Controller
 @RequestMapping("movie")
